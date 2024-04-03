@@ -30,7 +30,7 @@
   </div>
 </template>
 <script>
-import { ref } from 'vue';
+import { nextTick, ref } from 'vue';
 import { useRouter } from 'vue-router';
 
 export default {
@@ -39,7 +39,10 @@ export default {
     const columns = ref(0);
     const router = useRouter();
 
-    const onSetSize = (box) => {
+    const onSetSize = async (box) => {
+      // force rerender of the container to drop the blocks color to default
+      rows.value = 0;
+      await nextTick();
       rows.value = box.height;
       columns.value = box.width;
     }

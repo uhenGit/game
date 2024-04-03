@@ -19,6 +19,7 @@
           v-model="state.password"
           label="Password:"
           required
+          type="password"
           :error-messages="v$.password.$errors.map((err) => err.$message)"
           class="mt-4"
         />
