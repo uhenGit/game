@@ -32,22 +32,27 @@
 <script>
 import { nextTick, ref } from 'vue';
 import { useRouter } from 'vue-router';
+import Box from '@/composables/savedBox.js';
 
 export default {
   setup() {
-    const rows = ref(0);
-    const columns = ref(0);
+    const box = new Box('box');
+    const { height, width } = box.getSavedBox();
+    const rows = ref(height);
+    const columns = ref(width);
     const router = useRouter();
 
-    const onSetSize = async (box) => {
+    const onSetSize = async (boxSize) => {
       // force rerender of the container to drop the blocks color to default
       rows.value = 0;
       await nextTick();
-      rows.value = box.height;
-      columns.value = box.width;
+      rows.value = boxSize.height;
+      columns.value = boxSize.width;
+      box.saveBox(boxSize);
     }
 
     const onLogout = () => {
+      box.clearBox();
       router.push('/');
     }
 
