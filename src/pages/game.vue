@@ -1,5 +1,8 @@
 <template>
-  <div class="d-flex justify-space-between pa-4">
+  <div
+    ref="header"
+    class="d-flex justify-space-between pa-4"
+  >
     <h2>Game</h2>
     <v-btn
       type="button"
@@ -9,6 +12,7 @@
     </v-btn>
   </div>
   <size-form
+    :header-height="headerHeight"
     @set-size="onSetSize"
   />
   <div
@@ -30,24 +34,26 @@
   </div>
 </template>
 <script>
-import { nextTick, ref } from 'vue';
+import { nextTick, ref, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
 import Box from '@/composables/savedBox.js';
 
 export default {
   setup() {
     const box = new Box('box');
-    const { height, width } = box.getSavedBox();
-    const rows = ref(height);
-    const columns = ref(width);
+    const { boxHeight, boxWidth } = box.getSavedBox();
+    const rows = ref(boxHeight);
+    const columns = ref(boxWidth);
+    const header = ref(null);
+    const headerHeight = ref(0);
     const router = useRouter();
 
     const onSetSize = async (boxSize) => {
       // force rerender of the container to drop the blocks color to default
       rows.value = 0;
       await nextTick();
-      rows.value = boxSize.height;
-      columns.value = boxSize.width;
+      rows.value = boxSize.boxHeight;
+      columns.value = boxSize.boxWidth;
       box.saveBox(boxSize);
     }
 
@@ -56,7 +62,11 @@ export default {
       router.push('/');
     }
 
-    return { onSetSize, onLogout, rows, columns }
+    onMounted(() => {
+      headerHeight.value = header.value.clientHeight;
+    })
+
+    return { header, headerHeight, onSetSize, onLogout, rows, columns }
   }
 }
 </script>

@@ -3,24 +3,24 @@
     <v-card
       title="Login page"
       text="Enter your email and password to access the game"
-      class="w-75 mx-auto p-2"
+      class="w-auto mx-auto p-2"
     >
       <v-form
         class="w-100 pa-4"
         @submit.prevent="onLogin"
       >
         <v-text-field
-          v-model="state.email"
+          v-model="state.userEmail"
           label="Email:"
           required
-          :error-messages="v$.email.$errors.map((err) => err.$message)"
+          :error-messages="v$.userEmail.$errors.map((err) => err.$message)"
         />
         <v-text-field
-          v-model="state.password"
+          v-model="state.userPassword"
           label="Password:"
           required
           type="password"
-          :error-messages="v$.password.$errors.map((err) => err.$message)"
+          :error-messages="v$.userPassword.$errors.map((err) => err.$message)"
           class="mt-4"
         />
         <v-card-actions>
@@ -30,7 +30,7 @@
             block
             class="mt-2"
           >
-            Submit
+            Sign In
           </v-btn>
         </v-card-actions>
       </v-form>
@@ -47,20 +47,20 @@ import { required, email, minLength } from '@vuelidate/validators';
 export default {
   setup() {
     const state = reactive({
-      email: '',
-      password: '',
+      userEmail: '',
+      userPassword: '',
     });
     const router = useRouter();
     const rules = {
-      email: { required, email },
-      password: { required, minLength: minLength(6) },
+      userEmail: { required, email },
+      userPassword: { required, minLength: minLength(6) },
     };
     const v$ = useVuelidate(rules, state);
     const onLogin = async () => {
       const isFormValid = await v$.value.$validate();
 
       if (isFormValid) {
-        router.push('/game');
+        await router.push('/game');
       }
     }
 

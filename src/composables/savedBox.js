@@ -6,7 +6,7 @@ class Box {
   getSavedBox() {
     const savedBox = localStorage.getItem(this.name);
 
-    return savedBox ? JSON.parse(savedBox) : { height: 0, width: 0 };
+    return savedBox ? JSON.parse(savedBox) : { boxHeight: 0, boxWidth: 0 };
   }
 
   saveBox(box) {
